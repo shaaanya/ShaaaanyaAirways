@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shanya Airways</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+        .search-bar input, .search-bar button {
+            padding: 10px;
+            margin: 5px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+        .buttons button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #003366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .promotions {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+        .promotion {
+            width: 30%;
+            margin: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .promotion img {
+            width: 100%;
+            height: auto;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        .promotion h3 {
+            text-align: center;
+            padding: 10px;
+        }
+        .footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1>Shanya Airways</h1>
+        </div>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Explore</a>
+            <a href="#">Book</a>
+            <a href="#">Experience</a>
+            <a href="#">Privilege Club</a>
+            <a href="#">Help</a>
+            <a href="#">EN</a>
+            <a href="#" id="account">Log in | Sign up</a>
+        </nav>
+    </header>
+    <div class="search-bar">
+        <input type="text" placeholder="From">
+        <input type="text" placeholder="To">
+        <input type="date" placeholder="Departure">
+        <input type="date" placeholder="Return">
+        <button>Search</button>
+    </div>
+    <div class="buttons">
+        <button onclick="location.href='#'">Booking</button>
+        <button onclick="location.href='#'">Airport Map</button>
+    </div>
+    <div class="promotions" id="promotions-container">
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('Document loaded');
+                fetch('/api/promotions/')
+                    .then(response => {
+                        console.log('Response received', response);
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Data received', data);
+                        const promotionsContainer = document.getElementById('promotions-container');
+                        promotionsContainer.innerHTML = '';
+        
+                        data.forEach(promo => {
+                            const promoDiv = document.createElement('div');
+                            promoDiv.classList.add('promotion');
+                            promoDiv.innerHTML = `
+                                <img src="${promo.image_url}" alt="${promo.promotion_name}">
+                                <div class="promotion-details">
+                                    <h3>${promo.promotion_name}</h3>
+                                    <p>Route: ${promo.route}</p>
+                                    <p>${promo.promotion_start_date} - ${promo.promotion_end_date}</p>
+                                    <p>Discount: ${promo.promotion_discount}%</p>
+                                    <a href="#" class="btn">Book now</a>
+                                </div>
+                            `;
+                            promotionsContainer.appendChild(promoDiv);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching promotions:', error));
+            });
+        </script>
+        
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Shanya Airways. All Rights Reserved.</p>
+    </div>
+</body>
+</html>
